@@ -12,8 +12,8 @@ class ADBTool:
         adbCommand = "where" if (os.name == "nt") else "which"
 
         try:
-            ouput = subprocess.check_output([adbCommand, "adb.exe"]).decode().strip()
-            return ouput if (ouput) else None
+            output = subprocess.check_output([adbCommand, "adb"]).decode().strip()
+            return output if (output) else None
         except subprocess.CalledProcessError:
             print("(!) Couldn't check for ADB.")
             time.sleep(1.5)
@@ -30,15 +30,15 @@ class ADBTool:
             latestVersion = latestRelease["tag_name"]
 
             if (latestVersion != "pyadb_1.1"):
-                os.system("cls")
+                os.system("clear" if (os.name == "posix") else "cls")
                 print(f"(+) Update available '{latestVersion}'.")
                 time.sleep(1.5)
             else:
-                os.system("cls")
+                os.system("clear" if (os.name == "posix") else "cls")
                 print("(!) No updates available.")
                 time.sleep(1.5)
         except Exception:
-            os.system("cls")
+            os.system("clear" if (os.name == "posix") else "cls")
             print("(!) Couldn't check for updates!")
             time.sleep(1.5)
 
@@ -51,7 +51,7 @@ class ADBTool:
     def getDevices(self):
         print("(+) Fetching connected devices...")
         time.sleep(1.5)
-        os.system("cls")
+        os.system("clear" if (os.name == "posix") else "cls")
 
         devices = []
 
@@ -71,7 +71,7 @@ class Device:
     def isRooted(self):
         print("(+) Checking for ROOT access...")
         time.sleep(1.5)
-        os.system("cls")
+        os.system("clear" if (os.name == "posix") else "cls")
 
         try:
             output = subprocess.check_output(["adb", "-s", self.serial, "shell", "su", "-c", "echo", "Root"], stderr=subprocess.DEVNULL)
@@ -82,7 +82,7 @@ class Device:
     def pushFile(self, localPath, devicePath):
         print("(+) Transferring content...")
         time.sleep(1.5)
-        os.system("cls")
+        os.system("clear" if (os.name == "posix") else "cls")
 
         subprocess.run(["adb", "-s", self.serial, "push", localPath, devicePath], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
@@ -94,14 +94,14 @@ if (__name__ == "__main__"):
     adbTool.checkForUpdates()
 
     if (not adbTool.isInstalled()):
-        os.system("cls")
+        os.system("clear" if (os.name == "posix") else "cls")
         print("(!) ADB is not installed. Please install the Android SDK platform tools.")
         time.sleep(1.5)
         sys.exit(1)
     
     devices = adbTool.getDevices()
     if (not devices):
-        os.system("cls")
+        os.system("clear" if (os.name == "posix") else "cls")
         print("(!) No devices detected. Please make sure any Android devices are connected to this computer.")
         time.sleep(1.5)
         sys.exit(1)
@@ -113,7 +113,7 @@ if (__name__ == "__main__"):
     choice = input("(?) Enter the number of the device you want to use (default is 1): ")
     choice = int(choice) if (choice.isdigit() and 1 <= int(choice) <= len(devices)) else 1
     selectedDevices = Device(devices[choice - 1])
-    os.system("cls")
+    os.system("clear" if (os.name == "posix") else "cls")
 
     filePath = input("(?) Enter the file path to display (default is ./content.txt): ")
     devicePath = "/mnt/sdcard/content.txt" if (selectedDevices.isRooted()) else "/data/local/tmp/content.txt"
