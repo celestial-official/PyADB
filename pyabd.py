@@ -19,6 +19,9 @@ class ADBTool:
             time.sleep(1.5)
             return None
         
+    def clearScreen(self):
+        os.system("clear" if (os.name == "posix") else "cls")
+
     def checkForUpdates(self):
         print("(+) Checking for updates...")
         
@@ -30,17 +33,44 @@ class ADBTool:
             latestVersion = latestRelease["tag_name"]
 
             if (latestVersion != "pyadb_1.1"):
-                os.system("clear" if (os.name == "posix") else "cls")
+                self.clearScreen()
                 print(f"(+) Update available '{latestVersion}'.")
                 time.sleep(1.5)
+
+                choice = input("(?) Do you want to download and install the update? (yes/no): ").lower()
+
+                if (choice == "yes"):
+                    self.clearScreen()
+                    print("(!) Downloading and installing update...")
+
+                    updateURL = latestRelease["assets"][0]["browser_download_url"]
+                    updateFileName = latestRelease["assets"][0]["name"]
+                    self.downloadUpdate(updateURL, updateFileName)
+                    time.sleep(1.5)
+                else:
+                    self.clearScreen()
+                    print("(!) Update skipped.")
+                    time.sleep(1.5)
             else:
-                os.system("clear" if (os.name == "posix") else "cls")
+                self.clearScreen()
                 print("(!) No updates available.")
                 time.sleep(1.5)
         except Exception:
-            os.system("clear" if (os.name == "posix") else "cls")
+            self.clearScreen()
             print("(!) Couldn't check for updates!")
             time.sleep(1.5)
+
+    def downloadUpdate(self, url, filename):
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+
+            with open(filename, "wb") as f:
+                f.write(response.content)
+            
+            print("(!) Update downloaded successfully.")
+        except Exception as e:
+            print(f"(!) Error downloading update: {e}")
 
     def isInstalled(self):
         return self.adbPath is not None
@@ -51,7 +81,7 @@ class ADBTool:
     def getDevices(self):
         print("(+) Fetching connected devices...")
         time.sleep(1.5)
-        os.system("clear" if (os.name == "posix") else "cls")
+        self.clearScreen()
 
         devices = []
 
@@ -71,7 +101,7 @@ class Device:
     def isRooted(self):
         print("(+) Checking for ROOT access...")
         time.sleep(1.5)
-        os.system("clear" if (os.name == "posix") else "cls")
+        adbTool.clearScreen()
 
         try:
             output = subprocess.check_output(["adb", "-s", self.serial, "shell", "su", "-c", "echo", "Root"], stderr=subprocess.DEVNULL)
@@ -82,7 +112,7 @@ class Device:
     def pushFile(self, localPath, devicePath):
         print("(+) Transferring content...")
         time.sleep(1.5)
-        os.system("clear" if (os.name == "posix") else "cls")
+        adbTool.clearScreen()
 
         subprocess.run(["adb", "-s", self.serial, "push", localPath, devicePath], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
@@ -94,14 +124,14 @@ if (__name__ == "__main__"):
     adbTool.checkForUpdates()
 
     if (not adbTool.isInstalled()):
-        os.system("clear" if (os.name == "posix") else "cls")
+        adbTool.clearScreen()
         print("(!) ADB is not installed. Please install the Android SDK platform tools.")
         time.sleep(1.5)
         sys.exit(1)
     
     devices = adbTool.getDevices()
     if (not devices):
-        os.system("clear" if (os.name == "posix") else "cls")
+        adbTool.clearScreen()
         print("(!) No devices detected. Please make sure any Android devices are connected to this computer.")
         time.sleep(1.5)
         sys.exit(1)
@@ -113,7 +143,7 @@ if (__name__ == "__main__"):
     choice = input("(?) Enter the number of the device you want to use (default is 1): ")
     choice = int(choice) if (choice.isdigit() and 1 <= int(choice) <= len(devices)) else 1
     selectedDevices = Device(devices[choice - 1])
-    os.system("clear" if (os.name == "posix") else "cls")
+    adbTool.clearScreen()
 
     filePath = input("(?) Enter the file path to display (default is ./content.txt): ")
     devicePath = "/mnt/sdcard/content.txt" if (selectedDevices.isRooted()) else "/data/local/tmp/content.txt"
