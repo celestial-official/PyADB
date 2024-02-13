@@ -9,7 +9,7 @@ PyADB is a command-line utility for interacting with Android devices using ADB (
 
 ## ✨ Features
 
-- Push files to connected Android devices.
+- Copy the clipboard content of the PC to the selected device.
 - Execute shell commands remotely.
 - Automatic detection of ADB installation.
 - Error handling for ADB commands and device operations.
@@ -22,13 +22,11 @@ PyADB is a command-line utility for interacting with Android devices using ADB (
 2. **Connect Device:** Connect your Android device to your computer via USB and enable USB debugging.
 
 3. **Run Script:** Open a terminal and navigate to the directory containing `pyadb.py`, then execute the following command:
-   ```bash
-   python pyadb.py
-   ```
+   `python pyadb.py`
 
 4. **Follow Prompts:** Follow the prompts to select the connected device and enter the file path you want to transfer.
 
-5. **Enjoy:** Sit back and watch as the script transfers the file to your device and opens it using a text viewer application.
+5. **Enjoy:** Sit back and watch as the script transfers the clipboard content of your PC to your device.
 
 ## 🛠️ Requirements
 
