@@ -6,7 +6,7 @@ This script provides a simple command-line interface to interact with Android de
 ## Usage
 1. Make sure you have ADB installed on your system. If not, please install the Android SDK platform tools.
 2. Connect your Android device to your computer via USB.
-3. Run the script by executing `python adb_tool.py` in your terminal.
+3. Run the script by executing `python pyadb.py` in your terminal.
 4. Follow the prompts to select the connected device and enter the file path you want to transfer.
 5. The script will transfer the file to the selected device and open it using a text viewer application.
 
