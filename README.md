@@ -14,6 +14,7 @@ PyADB is a command-line utility for interacting with Android devices using ADB (
 - Automatic detection of ADB installation.
 - Error handling for ADB commands and device operations.
 - **Safe to Use:** PyADB has been scanned for malware, and the results on [VirusTotal](https://www.virustotal.com/gui/file/f1cd3811c25154ade9e978303add8b8f6ce27b64b8b175bef526d320d163e949/detection) confirm its safety.
+- PyADB includes an automatic update checker. Upon launch, it checks for updates and notifies you if a new version is available.
 
 ## 🚀 Quick Start
 
@@ -32,6 +33,11 @@ PyADB is a command-line utility for interacting with Android devices using ADB (
 
 - Python 3.x
 - ADB (Android Debug Bridge)
+
+## 📦 Required Modules
+
+To use PyADB, ensure you have the following Python modules installed:
+- `requests`
 
 ## 💡 Note
 
