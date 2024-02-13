@@ -2,7 +2,6 @@ import subprocess
 import sys
 import os
 import time
-import requests
 
 class ADBTool:
     def __init__(self):
@@ -21,57 +20,6 @@ class ADBTool:
         
     def clearScreen(self):
         os.system("clear" if (os.name == "posix") else "cls")
-
-    def checkForUpdates(self):
-        print("(+) Checking for updates...")
-        
-        try:
-            response = requests.get("https://api.github.com/repos/celestial-official/PyADB/releases/latest")
-            response.raise_for_status()
-
-            latestRelease = response.json()
-            latestVersionTag = latestRelease["tag_name"]
-            latestVersion = latestVersionTag.split("_v")[1]
-
-            if (latestVersion != "1.1"):
-                self.clearScreen()
-                print(f"(+) Update available '{latestVersionTag}'.")
-                time.sleep(1.5)
-
-                choice = input("(?) Do you want to download and install the update? (yes/no): ").lower()
-
-                if (choice == "yes"):
-                    self.clearScreen()
-                    print("(!) Downloading and installing update...")
-
-                    updateURL = latestRelease["assets"][0]["browser_download_url"]
-                    updateFileName = latestRelease["assets"][0]["name"]
-                    self.downloadUpdate(updateURL, updateFileName)
-                    time.sleep(1.5)
-                else:
-                    self.clearScreen()
-                    print("(!) Update skipped.")
-                    time.sleep(1.5)
-            else:
-                self.clearScreen()
-                print("(!) No updates available.")
-                time.sleep(1.5)
-        except Exception:
-            self.clearScreen()
-            print("(!) Couldn't check for updates!")
-            time.sleep(1.5)
-
-    def downloadUpdate(self, url, filename):
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-
-            with open(filename, "wb") as f:
-                f.write(response.content)
-            
-            print("(!) Update downloaded successfully.")
-        except Exception as e:
-            print(f"(!) Error downloading update: {e}")
 
     def isInstalled(self):
         return self.adbPath is not None
@@ -122,7 +70,6 @@ class Device:
 
 if (__name__ == "__main__"):
     adbTool = ADBTool()
-    adbTool.checkForUpdates()
 
     if (not adbTool.isInstalled()):
         adbTool.clearScreen()
