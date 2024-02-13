@@ -30,11 +30,12 @@ class ADBTool:
             response.raise_for_status()
 
             latestRelease = response.json()
-            latestVersion = latestRelease["tag_name"]
+            latestVersionTag = latestRelease["tag_name"]
+            latestVersion = latestVersionTag.split("_v")[1]
 
-            if (latestVersion != "pyadb_1.1"):
+            if (latestVersion != "1.1"):
                 self.clearScreen()
-                print(f"(+) Update available '{latestVersion}'.")
+                print(f"(+) Update available '{latestVersionTag}'.")
                 time.sleep(1.5)
 
                 choice = input("(?) Do you want to download and install the update? (yes/no): ").lower()
