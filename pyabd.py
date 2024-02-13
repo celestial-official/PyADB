@@ -2,6 +2,7 @@ import subprocess
 import sys
 import os
 import time
+import requests
 
 class ADBTool:
     def __init__(self):
@@ -17,6 +18,29 @@ class ADBTool:
             print("(!) Couldn't check for ADB.")
             time.sleep(1.5)
             return None
+        
+    def checkForUpdates(self):
+        print("(+) Checking for updates...")
+        
+        try:
+            response = requests.get("https://api.github.com/repos/celestial-official/PyADB/releases/latest")
+            response.raise_for_status()
+
+            latestRelease = response.json()
+            latestVersion = latestRelease["tag_name"]
+
+            if (latestVersion != "pyadb_1.1"):
+                os.system("cls")
+                print(f"(+) Update available '{latestVersion}'.")
+                time.sleep(1.5)
+            else:
+                os.system("cls")
+                print("(!) No updates available.")
+                time.sleep(1.5)
+        except Exception:
+            os.system("cls")
+            print("(!) Couldn't check for updates!")
+            time.sleep(1.5)
 
     def isInstalled(self):
         return self.adbPath is not None
@@ -67,6 +91,7 @@ class Device:
 
 if (__name__ == "__main__"):
     adbTool = ADBTool()
+    adbTool.checkForUpdates()
 
     if (not adbTool.isInstalled()):
         os.system("cls")
